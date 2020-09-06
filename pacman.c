@@ -29,6 +29,7 @@ int main(){
     labirinto = criaLabirinto();
 
     direcao = direcaoAnterior = KEY_LEFT;
+    sucesso = 1;
 
     clear();
     mostraLabirinto(labirinto);
@@ -40,9 +41,6 @@ int main(){
 
         if ( pegaTecla() ){
             direcao = getch();
-        }
-        else {
-            direcao = direcaoAnterior;
         }
 
         if ( direcao == 'q' )
