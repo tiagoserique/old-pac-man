@@ -1,6 +1,7 @@
 #include "lib_jogo.h"
 
 
+/* configuracoes inciais do ncurses */
 int inicializaJogo(){
 
     initscr();
@@ -25,6 +26,8 @@ int inicializaJogo(){
     init_color(COLOR_BLUE, 0, 0, 650);
     init_pair(1, COLOR_BLUE, COLOR_BLACK);
     init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(3, COLOR_RED, COLOR_BLACK);
+    init_pair(4, COLOR_GREEN, COLOR_BLACK);
 
     /*cbreak();*/               /* desabilita buffer na entrada */
     noecho();               /* nao mostra o que foi digitado na tela */
@@ -35,6 +38,7 @@ int inicializaJogo(){
     return 1;
 }
 
+/* configuracoes para finalizacao do jogo */
 void finalizaJogo(){
 
     endwin();
@@ -42,24 +46,29 @@ void finalizaJogo(){
     return;
 }
 
-struct labirinto criaLabirinto(){
+/* cria labirinto */
+struct labirinto *criaLabirinto(){
    
-    struct labirinto labirinto;
+    struct labirinto *temp;
     int linha;
 
-    labirinto.qtdLin = MAX_LIN;
-    labirinto.qtdCol = MAX_COL;
+    temp = malloc(sizeof(struct labirinto));
 
-    labirinto.matriz = calloc(labirinto.qtdLin, sizeof(int *));
+    temp->qtdLin = MAX_LIN;
+    temp->qtdCol = MAX_COL;
 
-    for (linha = 0; linha < labirinto.qtdLin; linha++)
-        labirinto.matriz[linha] = calloc(labirinto.qtdCol, sizeof(int));
+    temp->matriz = calloc(temp->qtdLin, sizeof(int *));
 
-    adicionaBarreiras(&labirinto);
+    for (linha = 0; linha < temp->qtdLin; linha++)
+        temp->matriz[linha] = calloc(temp->qtdCol, sizeof(int));
 
-    return labirinto;
+    adicionaBarreiras(temp);
+    adicionaPastilha(temp);
+
+    return temp;
 }
 
+/* adiciona barreiras do labirinto */
 void adicionaBarreiras(struct labirinto *labirinto){
 
     /*
@@ -169,7 +178,7 @@ void adicionaBarreiras(struct labirinto *labirinto){
     return;
 } 
 
-/* cria barreiras do labirinto */
+/* cria as barreiras do labirinto na matriz */
 void criaBarreira(struct labirinto *labirinto, int linha, int qtdLinhas,
  int coluna, int qtdColunas){
 
@@ -180,9 +189,9 @@ void criaBarreira(struct labirinto *labirinto, int linha, int qtdLinhas,
 
     int x, y;
 
-    for (x = linha - 1; x <= qtdLinhas - 1 ; x++){
-        for (y = coluna - 1; y <= qtdColunas - 1 ; y++){
-            if ( labirinto->matriz[x][y] != -1 )
+    for (x = convertePosicoes(linha) ; x <= convertePosicoes(qtdLinhas) ; x++){
+        for (y = convertePosicoes(coluna) ; y <= convertePosicoes(qtdColunas) ; y++){
+            if ( labirinto->matriz[x][y] != BARREIRA )
                 labirinto->matriz[x][y] = BARREIRA;
             else
                 continue;
@@ -192,31 +201,37 @@ void criaBarreira(struct labirinto *labirinto, int linha, int qtdLinhas,
     return;
 }
 
-void mostraLabirinto(struct labirinto labirinto){
+/* exibe o labirinto */
+void mostraLabirinto(struct labirinto *labirinto){
 
     int linha, coluna, atributo;
 
-    for (linha = 0; linha < labirinto.qtdLin; linha++){
-        for (coluna = 0; coluna < labirinto.qtdCol; coluna++){
-            if ( labirinto.matriz[linha][coluna] == VAZIO ){
+    for (linha = 0; linha < labirinto->qtdLin; linha++){
+        for (coluna = 0; coluna < labirinto->qtdCol; coluna++){
+            
+            if ( labirinto->matriz[linha][coluna] == VAZIO ){
+
                 atributo = COLOR_PAIR(1);
                 attron(atributo);
                 mvprintw(linha + 1, coluna + 1, " ");
                 attroff(atributo);
             }
-            else if ( labirinto.matriz[linha][coluna] == 1 ){
-                atributo = COLOR_PAIR(1);
+            else if ( labirinto->matriz[linha][coluna] == PASTILHA_NORMAL ){
+
+                atributo = A_REVERSE | COLOR_PAIR(3);
                 attron(atributo);
                 mvprintw(linha + 1, coluna + 1, " ");
                 attroff(atributo);
             }
-            else if ( labirinto.matriz[linha][coluna] == 2 ){
-                atributo = COLOR_PAIR(1);
+            else if ( labirinto->matriz[linha][coluna] == PASTILHA_ESPECIAL ){
+
+                atributo = A_REVERSE | COLOR_PAIR(4);
                 attron(atributo);
                 mvprintw(linha + 1, coluna + 1, " ");
                 attroff(atributo);
             }
-            else if ( labirinto.matriz[linha][coluna] == BARREIRA ){
+            else if ( labirinto->matriz[linha][coluna] == BARREIRA ){
+
                 atributo = A_REVERSE | COLOR_PAIR(1); 
                 attron(atributo);
                 mvprintw(linha + 1, coluna + 1, " ");
@@ -228,6 +243,7 @@ void mostraLabirinto(struct labirinto labirinto){
     return;
 }
 
+/* exibe o layout do jogo */
 void mostraLayout(){
 
     attron(COLOR_PAIR(1));
@@ -244,30 +260,7 @@ void mostraLayout(){
     return;
 }
 
-void movePacman(int direcao, struct pacman *pacman){
-
-    switch ( direcao ){
-        case KEY_UP :
-            pacman->posiLin -= 1;
-            break;
-
-        case KEY_DOWN :
-            pacman->posiLin += 1;
-            break;
-        
-        case KEY_LEFT :
-            pacman->posiCol -= 1;
-            break;
-        
-        case KEY_RIGHT :
-            pacman->posiCol += 1;
-            break;
-            
-    }
-
-    return;
-}
-
+/* checa se uma tecla foi pressionada */
 int pegaTecla(){
 
     int ch = getch();
@@ -280,58 +273,125 @@ int pegaTecla(){
     }
 }
 
+/* faz a checagem da colizao do personagem na direcao do movimento */
 int checaColizao(struct labirinto *labirinto, int direcao, struct pacman *pacman){
-
 
     int linha, coluna, limite;
 
     switch ( direcao ){
         case KEY_UP :
-            linha = posicaoNcursesParaMatriz(pacman->posiLin - 2); 
-            coluna = posicaoNcursesParaMatriz(pacman->posiCol - 1);
-            limite = posicaoNcursesParaMatriz(pacman->posiCol + 1);
+            linha = convertePosicoes(pacman->posiLin - 2); 
+            coluna = convertePosicoes(pacman->posiCol - 1);
+            limite = convertePosicoes(pacman->posiCol + 1);
             break;
 
         case KEY_DOWN :
-            linha = posicaoNcursesParaMatriz(pacman->posiLin + 2);
-            coluna = posicaoNcursesParaMatriz(pacman->posiCol - 1);
-            limite = posicaoNcursesParaMatriz(pacman->posiCol + 1);
+            linha = convertePosicoes(pacman->posiLin + 2);
+            coluna = convertePosicoes(pacman->posiCol - 1);
+            limite = convertePosicoes(pacman->posiCol + 1);
             break;
 
         case KEY_LEFT :
-            linha = posicaoNcursesParaMatriz(pacman->posiLin - 1);
-            coluna = posicaoNcursesParaMatriz(pacman->posiCol - 2);
-            limite = posicaoNcursesParaMatriz(pacman->posiLin + 1);
+            linha = convertePosicoes(pacman->posiLin - 1);
+            coluna = convertePosicoes(pacman->posiCol - 2);
+            limite = convertePosicoes(pacman->posiLin + 1);
             break;
 
         case KEY_RIGHT :
-            linha = posicaoNcursesParaMatriz(pacman->posiLin - 1);
-            coluna = posicaoNcursesParaMatriz(pacman->posiCol + 2);
-            limite = posicaoNcursesParaMatriz(pacman->posiLin + 1);
+            linha = convertePosicoes(pacman->posiLin - 1);
+            coluna = convertePosicoes(pacman->posiCol + 2);
+            limite = convertePosicoes(pacman->posiLin + 1);
             break;
 
     }
 
     if ( direcao == KEY_UP || direcao == KEY_DOWN){
         for ( ; coluna <= limite ; coluna++){
+
             if ( labirinto->matriz[linha][coluna] == BARREIRA )
                 return 0;
+            else if ( labirinto->matriz[linha][coluna] == PASTILHA_NORMAL ){
+                labirinto->matriz[linha][coluna] = VAZIO;
+                /* adiciona score */
+            }
         }
     }
     else if ( direcao == KEY_LEFT || direcao == KEY_RIGHT){
         for ( ; linha <= limite ; linha++){
+
             if ( labirinto->matriz[linha][coluna] == BARREIRA )
                 return 0;
+            else if ( labirinto->matriz[linha][coluna] == PASTILHA_NORMAL ){
+                labirinto->matriz[linha][coluna] = VAZIO;
+                /* adiciona score */
+            }
         }
     }
 
     return 1;
 }
 
-/* faz relaçao entre as posicoes do ncurses e da matriz */
-int posicaoNcursesParaMatriz(int posicao){
-
+/* transforma posicao do ncurses para matriz */
+int convertePosicoes(int posicao){
     return posicao - 1; 
 }
 
+/* adiciona as pastilhas normais no labirinto */
+void adicionaPastilha(struct labirinto *labirinto){
 
+    int linha, coluna;
+
+    for (linha = 1; linha <= labirinto->qtdLin - 2 ; linha += 3){
+        for (coluna = 1; coluna <= labirinto->qtdCol - 2 ; coluna += 3){
+
+            if ( !( convertePosicoes(linha) >= 18 
+            && convertePosicoes(linha) <= 24 
+            && convertePosicoes(coluna) >= 36 
+            && convertePosicoes(coluna) <= 45 ) ) 
+                criaPastilha(labirinto, linha, coluna);
+        }
+    }
+
+    return;
+}
+
+/* cria as pastilhas normais do labirinto na matriz */
+void criaPastilha(struct labirinto *labirinto, int linha, int coluna){
+
+    int x, y, limiteLinha, limiteColuna, ok;
+    
+    limiteLinha = convertePosicoes(linha) + 2;
+    limiteColuna = convertePosicoes(coluna) + 2;
+    ok = 1;
+
+    for (y = convertePosicoes(linha); y <= limiteLinha ; y++){
+        for (x = convertePosicoes(coluna) ; x <= limiteColuna ; x++){
+            if ( labirinto->matriz[y][x] == BARREIRA
+            || ( y == POSI_LIN_INICIAL && x == POSI_COL_INICIAL ) ){
+                ok = 0;
+                break;
+            }
+        }
+    }
+
+    if ( ok )
+        labirinto->matriz[limiteLinha - 1][limiteColuna - 1] = PASTILHA_NORMAL;
+
+    return;
+}
+
+int temPastilha(struct labirinto *labirinto){
+    
+    int linha, coluna;
+
+    for (linha = 0; linha < labirinto->qtdLin ; linha ++){
+        for (coluna = 0; coluna < labirinto->qtdCol ; coluna ++){
+            
+            if ( labirinto->matriz[linha][coluna] == PASTILHA_NORMAL
+            || labirinto->matriz[linha][coluna] == PASTILHA_ESPECIAL )
+                return 1;
+        }
+    }
+
+    return 0;
+}

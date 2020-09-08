@@ -16,7 +16,8 @@ struct pacman {
     int vivo;
 };
 
+void movePacman(int direcao, struct pacman *pacman);
 void mostraPacman(int linha, int coluna);
-struct pacman criaPacman();
+struct pacman *criaPacman();
 
 #endif
