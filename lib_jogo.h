@@ -8,7 +8,7 @@
 /* _______________________________PACMAN_____________________________________ */
 
 /* delay de velocidade do pacman */
-#define DELAY_PACMAN 6
+#define DELAY_PACMAN 8
 #define DELAY_LIMITE_PACMAN 3
 
 /* definem a posicao inicial do pacman no ncurses */

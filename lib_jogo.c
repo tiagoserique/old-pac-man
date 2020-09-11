@@ -171,11 +171,15 @@ void adicionaBarreiras(struct labirinto *labirinto){
     criaBarreira(labirinto,  10,   15,  55,  57);
     criaBarreira(labirinto,   7,    9,  70,  72);
 
-    criaBarreira(labirinto,  13,   27,  13,  15);
-    criaBarreira(labirinto,  13,   27,  19,  21);
+    criaBarreira(labirinto,  13,   18,  13,  15);
+    criaBarreira(labirinto,  13,   18,  19,  21);
+    criaBarreira(labirinto,  22,   27,  13,  15);
+    criaBarreira(labirinto,  22,   27,  19,  21);
 
-    criaBarreira(labirinto,  13,   27,  61,  63);
-    criaBarreira(labirinto,  13,   27,  67,  69);
+    criaBarreira(labirinto,  13,   18,  61,  63);
+    criaBarreira(labirinto,  13,   18,  67,  69);
+    criaBarreira(labirinto,  22,   27,  61,  63);
+    criaBarreira(labirinto,  22,   27,  67,  69);
 
     return;
 } 
