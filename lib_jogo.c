@@ -137,7 +137,7 @@ void adicionaBarreiras(struct labirinto *labirinto){
 
 /* __________________________outras barreiras________________________________ */
 
-    criaBarreira(labirinto,   4,    6,    37,    45);
+    criaBarreira(labirinto,   4,    6,  37,  45);
     
     criaBarreira(labirinto,   7,   21,   7,   9);
     criaBarreira(labirinto,  25,   39,   7,   9);
@@ -145,7 +145,7 @@ void adicionaBarreiras(struct labirinto *labirinto){
     
     criaBarreira(labirinto,   7,   21,  73,  75);
     criaBarreira(labirinto,  25,   39,  73,  75);
-    criaBarreira(labirinto,  37,   39,  62,  72);
+    criaBarreira(labirinto,  37,   39,  61,  72);
 
     criaBarreira(labirinto,  37,   42,  25,  33);
     criaBarreira(labirinto,  31,   39,  37,  45);
