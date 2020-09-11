@@ -123,92 +123,59 @@ void adicionaBarreiras(struct labirinto *labirinto){
 
     adicionaPortao(labirinto, 19, 40);
 
-/* _______________barreiras da primeira e ultima linha_______________________ */
+/* __________________barreiras da primeira e ultima linha____________________ */
 
     criaBarreira(labirinto,           1,       3, 1, MAX_COL);
     criaBarreira(labirinto, MAX_LIN - 2, MAX_LIN, 1, MAX_COL);
 
-/* ______________barreiras da primeira e ultima coluna_______________________ */
+/* __________________barreiras da primeira e ultima coluna___________________ */
 
     criaBarreira(labirinto,  1,      21,           1,       3);
     criaBarreira(labirinto, 25, MAX_LIN,           1,       3);
     criaBarreira(labirinto,  1,      21, MAX_COL - 2, MAX_COL);
     criaBarreira(labirinto, 25, MAX_LIN, MAX_COL - 2, MAX_COL);
 
-/* _____________________barreiras quadradas__________________________________ */   
-
-    criaBarreira(labirinto,  7, 12,  7, 12);
-
-    criaBarreira(labirinto,  7, 12, 22, 27);
-
-    criaBarreira(labirinto,  7, 15, 31, 36);
-    criaBarreira(labirinto, 10, 15, 31, 39);
-
-    criaBarreira(labirinto,  7, 15, 46, 51);
-    criaBarreira(labirinto, 10, 15, 43, 51);
-
-    criaBarreira(labirinto,  7, 12, 55, 60);
-
-    criaBarreira(labirinto,  7, 12, 70, 75);
-
-    criaBarreira(labirinto, 16, 21, 16, 21);
-
-    criaBarreira(labirinto, 19, 27, 25, 30);
-
-    criaBarreira(labirinto, 19, 27, 52, 57);
-
-    criaBarreira(labirinto, 16, 21, 61, 66);
-
-    criaBarreira(labirinto, 31, 36,  7, 12);
-    criaBarreira(labirinto, 28, 33, 13, 21);
-    criaBarreira(labirinto, 25, 33, 16, 21);
-
-    criaBarreira(labirinto, 31, 36, 25, 33);
-
-    criaBarreira(labirinto, 31, 36, 37, 45);
-
-    criaBarreira(labirinto, 31, 36, 49, 57);
-
-    criaBarreira(labirinto, 25, 33, 61, 66);
-    criaBarreira(labirinto, 28, 33, 61, 69);
-    criaBarreira(labirinto, 31, 36, 70, 75);
-
 /* __________________________outras barreiras________________________________ */
 
-    criaBarreira(labirinto,  4,  6, 16, 18);
-    criaBarreira(labirinto,  4,  6, 40, 42);
-    criaBarreira(labirinto,  4,  6, 64, 66);
+    criaBarreira(labirinto,   4,    6,    37,    45);
+    
+    criaBarreira(labirinto,   7,   21,   7,   9);
+    criaBarreira(labirinto,  25,   39,   7,   9);
+    criaBarreira(labirinto,  37,   39,  10,  21);
+    
+    criaBarreira(labirinto,   7,   21,  73,  75);
+    criaBarreira(labirinto,  25,   39,  73,  75);
+    criaBarreira(labirinto,  37,   39,  62,  72);
 
-    criaBarreira(labirinto, 10, 12, 13, 18);
-    criaBarreira(labirinto, 13, 15,  7,  9);
+    criaBarreira(labirinto,  37,   42,  25,  33);
+    criaBarreira(labirinto,  31,   39,  37,  45);
+    criaBarreira(labirinto,  37,   42,  49,  57);
+    
+    criaBarreira(labirinto,  31,   33,  13,  33);
+    criaBarreira(labirinto,  19,   30,  25,  30);
 
-    criaBarreira(labirinto, 13, 15, 25, 27);
+    criaBarreira(labirinto,  31,   33,  49,  69);
+    criaBarreira(labirinto,  19,   30,  52,  57);
+    
+    criaBarreira(labirinto,   7,    9,  10,  12);
+    criaBarreira(labirinto,   7,    9,  16,  27);
+    criaBarreira(labirinto,  10,   15,  25,  27);
 
-    criaBarreira(labirinto, 13, 15, 55, 57);
+    criaBarreira(labirinto,   7,    9,  31,  33);
+    criaBarreira(labirinto,  10,   15,  31,  39);
 
-    criaBarreira(labirinto, 13, 15, 73, 75);
-    criaBarreira(labirinto, 10, 12, 64, 69);
+    criaBarreira(labirinto,   7,    9,  49,  51);
+    criaBarreira(labirinto,  10,   15,  43,  51);
+    
+    criaBarreira(labirinto,   7,    9,  55,  66);
+    criaBarreira(labirinto,  10,   15,  55,  57);
+    criaBarreira(labirinto,   7,    9,  70,  72);
 
-    criaBarreira(labirinto, 16, 18, 13, 15);
+    criaBarreira(labirinto,  13,   27,  13,  15);
+    criaBarreira(labirinto,  13,   27,  19,  21);
 
-    criaBarreira(labirinto, 16, 18, 67, 69);
-
-    criaBarreira(labirinto, 19, 27,  7,  9);
-    criaBarreira(labirinto, 22, 24, 10, 12);
-
-    criaBarreira(labirinto, 22, 24, 70, 72);
-    criaBarreira(labirinto, 19, 27, 73, 75);
-
-    criaBarreira(labirinto, 37, 39, 16, 21);
-
-    criaBarreira(labirinto, 37, 39, 40, 42);
-
-    criaBarreira(labirinto, 37, 39, 61, 66);
-
-    criaBarreira(labirinto, 40, 42,  7, 12);
-    criaBarreira(labirinto, 40, 42, 25, 36);
-    criaBarreira(labirinto, 40, 42, 46, 57);
-    criaBarreira(labirinto, 40, 42, 70, 75);
+    criaBarreira(labirinto,  13,   27,  61,  63);
+    criaBarreira(labirinto,  13,   27,  67,  69);
 
     return;
 } 
@@ -497,8 +464,8 @@ void adicionaPastilhas(struct labirinto *labirinto){
     }
 
     /* adiciona as pastilhas especiais nas posicoes indicadas */
-    criaPastilhaEspecial(labirinto, 35, 14);
-    criaPastilhaEspecial(labirinto, 35, 68);
+    criaPastilhaEspecial(labirinto, 35, 11);
+    criaPastilhaEspecial(labirinto, 35, 71);
     criaPastilhaEspecial(labirinto,  8, 14);
     criaPastilhaEspecial(labirinto,  8, 68);
 

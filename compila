@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gcc -ansi -Wall *.c -o pacman -lncurses
