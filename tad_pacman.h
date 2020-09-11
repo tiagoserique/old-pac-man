@@ -1,23 +1,28 @@
-#ifndef _PACMAN_H_
-
 #include <stdlib.h>
 #include <ncurses.h>
 
-#define PACMAN 1
+#define PACMAN 0100
 #define TAM_PACMAN 3
+#define VIDAS 4
 
 struct pacman {
 
-    int altura;
-    int largura;
-    int posiCol; /* valor referente ao ncurses */
-    int posiLin; /* valor referente ao ncurses */
+    int tamanho; 
+    int posiCol; /* valor da posicao referente ao ncurses */
+    int posiLin; /* valor da posicao referente ao ncurses */
     int vidas;
     int vivo;
 };
 
+
+/* faz a movimentacao do pacman */
 void movePacman(int direcao, struct pacman *pacman);
-void mostraPacman(int linha, int coluna);
+
+/* mostra o pacman */
+void mostraPacman(struct pacman *pacman);
+
+/* cria pacman */
 struct pacman *criaPacman();
 
-#endif
+/* contem a logica para atravessar o mapa */
+void pacmanAtravessaMapa(struct pacman *pacman);

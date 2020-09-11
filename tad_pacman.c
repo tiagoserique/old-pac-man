@@ -1,6 +1,6 @@
 #include "tad_pacman.h"
 
-/* faz a movimentacao do pacman */
+
 void movePacman(int direcao, struct pacman *pacman){
 
     switch ( direcao ){
@@ -24,33 +24,82 @@ void movePacman(int direcao, struct pacman *pacman){
     return;
 }
 
-/* mostra o pacman */
-void mostraPacman(int linha, int coluna){
+
+void mostraPacman(struct pacman *pacman){
+    
     int x, y;
 
-    for (y = linha - 1; y <= linha + 1 ; y++){
-        for (x = coluna - 1; x <= coluna + 1 ; x++){
-            attron( A_REVERSE | COLOR_PAIR(2));
-            mvprintw(y, x, " ");
-            attroff(COLOR_PAIR(2));
+    /* mostra o pacman inteiro caso esteja entre essas posicoes */
+    if ( pacman->posiCol >= 2 && pacman->posiCol <= 80 ){
+
+        for (y = pacman->posiLin - 1; y <= pacman->posiLin + 1 ; y++){
+            for (x = pacman->posiCol - 1; x <= pacman->posiCol + 1 ; x++){
+                attron( A_REVERSE | COLOR_PAIR(2));
+                mvprintw(y, x, " ");
+                attroff(COLOR_PAIR(2));
+            }
         }
     }
+    else
+        /* caso nao esteja, ele atravessa o mapa */
+        pacmanAtravessaMapa(pacman);
 
-    mvprintw(y, x, "%d %d", linha, coluna);
+    mvprintw(y, x, "%d %d", pacman->posiLin, pacman->posiCol);
 
     return;
 }
 
-/* cria pacman */
+
 struct pacman *criaPacman(){
 
     struct pacman *temp;
 
     temp = malloc(sizeof(struct pacman));
-
-    temp->largura = temp->altura = TAM_PACMAN;
-
-    temp->vidas = temp->vivo = 1;
+    temp->tamanho = TAM_PACMAN;
+    temp->vidas = VIDAS;
+    temp->vivo = 1;
 
     return temp;
+}
+
+
+void pacmanAtravessaMapa(struct pacman *pacman){
+
+    int x, y, temp;
+
+    attron( A_REVERSE | COLOR_PAIR(2));
+
+    /* faz o desenho das partes do pacman quando passa dos limites */
+    if ( pacman->posiCol == 81 || pacman->posiCol == 0 ){
+
+        temp = 1;
+        if ( pacman->posiCol == 0 )
+            pacman->posiCol = 81;
+
+        for (y = pacman->posiLin - 1; y <= pacman->posiLin + 1; y++){
+            for (x = pacman->posiCol - 1; x <= pacman->posiCol ; x++){
+                mvprintw(y, x, " ");
+            }
+
+            mvprintw(y, temp, " ");
+        }
+    }
+    else if ( pacman->posiCol == 1 || pacman->posiCol == 82 ){
+
+        temp = 81;
+        if ( pacman->posiCol == 82 )
+            pacman->posiCol = 1;
+
+        for (y = pacman->posiLin - 1; y <= pacman->posiLin + 1; y++){
+            for (x = pacman->posiCol; x <= pacman->posiCol + 1 ; x++){
+                mvprintw(y, x, " ");
+            }
+
+            mvprintw(y, temp, " ");
+        }
+    }
+
+    attroff(COLOR_PAIR(2));
+
+    return;
 }
