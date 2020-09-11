@@ -1,7 +1,6 @@
 #include "lib_telas.h"
 
 
-/* */
 int telaDeFimDeJogo(){
 
     int posiLin, posiCol, temp; 
@@ -40,7 +39,6 @@ int telaDeFimDeJogo(){
 }
 
 
-/* */
 int telaDeNovoNivel(){
 
     clear();
@@ -83,3 +81,4 @@ int telaDeNovoNivel(){
         return 1;
     return 0;
 }
+

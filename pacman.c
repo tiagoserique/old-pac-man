@@ -9,21 +9,10 @@ int main(){
 
 /* __________________________INICIA PERSONAGENS______________________________ */
     
-    /**/
     struct pacman *pacman = criaPacman();
     pacman->posiLin = POSI_LIN_INICIAL;
     pacman->posiCol = POSI_COL_INICIAL;
     int delayPacman = DELAY_PACMAN;
-    /**/
-    
-    /*struct fantasma vermelho = criaFantasma();*/
-    
-    /*struct fantasma azul = criaFantasma();*/
-    
-    /*struct fantasma amarelo = criaFantasma();*/
-    
-    /*struct fantasma rosa = criaFantasma();*/
-
 
 /* _____________________________INICIA JOGO___________________________________*/
 
@@ -184,22 +173,6 @@ int main(){
         }
         usleep(DELAY); 
         refresh();
-
-        /*
-        if ( !pacman->vivo ){
-            erase();
-            pacman->posiLin = POSI_LIN_INICIAL;
-            pacman->posiCol = POSI_COL_INICIAL;
-            pacman->vivo    = 0;
-            mostraPacman(pacman);
-
-            reseta posi aliens 
-            mostra os aliens
-
-            refresh();
-            sleep(3);
-        }
-        */
 
         tempo++;
         if ( tempo == 60000 ){

@@ -54,7 +54,7 @@ int configuracoesIniciais(){
     noecho();               /* nao mostra o que foi digitado na tela */
     nodelay(stdscr, TRUE);  /* nao aguarda a digitacao               */
     keypad(stdscr, TRUE);   /* habilita as setas do teclado          */
-    curs_set(FALSE);        /* n mostra o cursor na tela             */
+    curs_set(FALSE);        /* nao mostra o cursor na tela           */
 
     return 1;
 }
