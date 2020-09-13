@@ -44,8 +44,6 @@ void mostraPacman(struct pacman *pacman){
         /* caso nao esteja, ele atravessa o mapa */
         pacmanAtravessaMapa(pacman);
 
-    mvprintw(y, x, "%d %d", pacman->posiLin, pacman->posiCol);
-
     return;
 }
 
