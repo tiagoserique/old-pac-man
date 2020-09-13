@@ -374,7 +374,8 @@ int checaColizao(struct jogo *jogo, int direcao, struct pacman *pacman){
         for ( ; coluna <= limite ; coluna++){
 
             /* se acha barreira na checagem */
-            if ( jogo->labirinto->matriz[linha][coluna] == BARREIRA )
+            if ( jogo->labirinto->matriz[linha][coluna] == BARREIRA
+              || jogo->labirinto->matriz[linha][coluna] == PORTAO )
                 return 0;
             /* se acha pastilha normal na checagem */
             else if ( jogo->labirinto->matriz[linha][coluna] == PASTILHA_NORMAL ){
@@ -405,7 +406,8 @@ int checaColizao(struct jogo *jogo, int direcao, struct pacman *pacman){
         for ( ; linha <= limite ; linha++){
 
             /* se acha barreira na checagem */
-            if ( jogo->labirinto->matriz[linha][coluna] == BARREIRA )
+            if ( jogo->labirinto->matriz[linha][coluna] == BARREIRA
+              || jogo->labirinto->matriz[linha][coluna] == PORTAO )
                 return 0;
             /* se acha pastilha normal na checagem */
             else if ( jogo->labirinto->matriz[linha][coluna] == PASTILHA_NORMAL ){
@@ -566,7 +568,7 @@ void reiniciaJogo(struct jogo *jogo, struct pacman *pacman, int *direcao,
 void adicionaPortao(struct labirinto *labirinto, int linha, int coluna){
 
     int x, y;
-    int qtdLinhas = convertePosicoes(linha) + 2;
+    int qtdLinhas = convertePosicoes(linha) + 1;
     int qtdColunas = convertePosicoes(coluna) + 2;
 
     for (x = convertePosicoes(linha) ; x <= qtdLinhas ; x++){
